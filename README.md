@@ -1,4 +1,4 @@
-# AdventOfCode2022
+# Advent Of Code 2022
 Repo for my solutions to the 2022 Advent of Code.
 All solutions created in C# .NET 6
 
