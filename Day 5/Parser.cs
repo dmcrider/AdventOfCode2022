@@ -3,6 +3,38 @@ class Parser
 {
     public static string ParseTopCrates(string fileInput)
     {
+        var stacksAndInstructions = GetStacksAndInstructions(fileInput);
+        var stacks = stacksAndInstructions.Item1;
+        var instructions = stacksAndInstructions.Item2;
+
+        var movedStacks = MoveStacks(stacks, instructions);
+        var topCrates = "";
+        foreach(var stack in movedStacks)
+        {
+            topCrates += stack.Pop();
+        }
+
+        return topCrates;
+    }
+
+    public static string ParseOrderedCrates(string fileInput)
+    {
+        var stacksAndInstructions = GetStacksAndInstructions(fileInput);
+        var stacks = stacksAndInstructions.Item1;
+        var instructions = stacksAndInstructions.Item2;
+
+        var movedStacks = MoveStacksInOrder(stacks, instructions);
+        var topCrates = "";
+        foreach(var stack in movedStacks)
+        {
+            topCrates += stack.Pop();
+        }
+
+        return topCrates;
+    }
+
+    private static Tuple<List<Stack<char>>, List<CraneInstruction>> GetStacksAndInstructions(string fileInput)
+    {
         var diagram = GetDiagram(fileInput);
         var columnCount = GetColumns(diagram);
         var backwardsStacks = GetStacks(diagram, columnCount);
@@ -15,14 +47,7 @@ class Parser
 
         var instructions = GetInstructions(fileInput);
 
-        var movedStacks = MoveStacks(stacks, instructions);
-        var topCrates = "";
-        foreach(var stack in movedStacks)
-        {
-            topCrates += stack.Pop();
-        }
-
-        return topCrates;
+        return new Tuple<List<Stack<char>>, List<CraneInstruction>>(stacks, instructions);
     }
 
     private static List<string> GetDiagram(string fileInput)
@@ -146,6 +171,35 @@ class Parser
             for(var i = 0; i < amount; i++)
             {
                 toStack.Push(fromStack.Pop());
+            }
+        }
+
+        return movedStacks;
+    }
+
+    private static List<Stack<char>> MoveStacksInOrder(List<Stack<char>> stacks, List<CraneInstruction> instructions)
+    {
+        var movedStacks = new List<Stack<char>>();
+        foreach(var stack in stacks)
+        {
+            movedStacks.Add(ReverseStack(new Stack<char>(stack)));
+        }
+
+        foreach(var inst in instructions)
+        {
+            // The instructions are 1-based, but the stacks are 0-based
+            var fromStack = movedStacks[inst.From - 1];
+            var toStack = movedStacks[inst.To - 1];
+            var amount = inst.Amount;
+
+            var tempStack = new Stack<char>();
+            for(var i = 0; i < amount; i++)
+            {
+                tempStack.Push(fromStack.Pop());
+            }
+            foreach(var elm in tempStack)
+            {
+                toStack.Push(elm);
             }
         }
 

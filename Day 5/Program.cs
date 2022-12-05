@@ -6,11 +6,13 @@ class Program
         Console.Clear();
 
         var topCrates = Parser.ParseTopCrates("input.txt");
+        var topCratesPart2 = Parser.ParseOrderedCrates("input.txt");
 
         Console.WriteLine("Advent of Code 2022 - Day 5");
         Console.WriteLine("Solution by Daylon Crider");
         Console.WriteLine("https://adventofcode.com/2022/day/5");
         Console.WriteLine("===================================");
         Console.WriteLine("Top crates from each stack: " + topCrates);
+        Console.WriteLine("Top crates from each stack (ordered): " + topCratesPart2);
     }
 }
