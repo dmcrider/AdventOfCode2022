@@ -1,7 +1,7 @@
 namespace Day_6;
 class Parser
 {
-    public static int Parse(string filePath)
+    public static int Parse(string filePath, int uniqueCharacters)
     {
         using var reader = new StreamReader(filePath);
         while (!reader.EndOfStream)
@@ -11,14 +11,14 @@ class Parser
 
             var chars = line.ToCharArray();
 
-            var marker = new char[4];
+            var marker = new char[uniqueCharacters];
             int j = 0;
 
             for (int i = 0; i < chars.Length; i++)
             {
                 marker[j] = chars[i];
 
-                if (i >= 4)
+                if (i >= uniqueCharacters)
                 {
                     if (CharArrayIsUnique(marker))
                     {
@@ -27,7 +27,7 @@ class Parser
                 }
 
                 j++;
-                if (j == 4)
+                if (j == uniqueCharacters)
                 {
                     j = 0;
                 }
